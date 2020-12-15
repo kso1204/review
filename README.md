@@ -3,6 +3,9 @@
 1. Review사이트 만들기
 2. 음식, 문화생활, 여행..? 등 태그를 나누어서 기록하기
 3. window10 + docker + laravel + vue
+4. 태그를 등록할 수 있는 관리자 페이지를 하나 설정하고
+5. 태그의 서브태그를 등록할 수 있는 페이지를 설정해보기
+
 
 # 초기셋팅
 
@@ -28,10 +31,15 @@
 20. npm install 
 21. npm run watch
 22. php artisan migrate 하고 레지스터 후 로그인
+23. ~npm install tailwindcss~
+24. tailwindcss 오류 npm uninstall tailwindcss
+25. npm install tailwindcss@compat
+26. npx tailwindcss init (https://stackoverflow.com/questions/64925926/error-postcss-plugin-tailwindcss-requires-postcss-8)
+27. npm install --save vue-router
 
 # 개발 
 
-# Day - 1
+# Day 1
 
 frontend를 blade파일이 아닌 vue로 구성할 예정이므로.. vue 셋팅
  
@@ -98,4 +106,23 @@ const app = new Vue({
 ![image](https://user-images.githubusercontent.com/6989005/102061298-a1e18680-3e36-11eb-8bf1-da82cabc6002.png)
 
 화면이 보이게 된다.
+
+이 부분을 태그를 등록하는 Page로 변환해보자 CSS는.. 최대한 마지막에 건드리는걸로..
+
+왼쪽에 메뉴 탭 설정하고 오른쪽에 해당 리스트 보여주는 전형적인 사이트로 구현
+
+
+# Day 2
+
+Facebook clone coding 영상을 보면서 만들었던 메뉴와 탭 형식을 이용해보기
+
+![image](https://user-images.githubusercontent.com/6989005/102155114-3511cf00-3ebe-11eb-965f-80d99af107d7.png)
+
+tailwindcss가 정상적으로 먹히지 않음..
+
+![image](https://user-images.githubusercontent.com/6989005/102159671-54612a00-3ec7-11eb-8a75-9f141cb27ecc.png)
+
+tailwindcss가 정상적으로 적용된 상단 탭 모습
+
+1. 태그 등록 페이지 구현 view-router사용
 
