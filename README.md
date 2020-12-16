@@ -36,7 +36,7 @@
 25. npm install tailwindcss@compat
 26. npx tailwindcss init (https://stackoverflow.com/questions/64925926/error-postcss-plugin-tailwindcss-requires-postcss-8)
 27. npm install --save vue-router
-
+28. npm install view-design --save
 # 개발 
 
 # Day 1
@@ -125,4 +125,177 @@ tailwindcss가 정상적으로 먹히지 않음..
 tailwindcss가 정상적으로 적용된 상단 탭 모습
 
 1. 태그 등록 페이지 구현 view-router사용
+
+```
+<template>
+    <div class="bg-white h-full w-full border-r">
+        <h1>MainTag Vue</h1>
+    </div>
+</template>
+
+<script>
+    export default {
+        name : "MainTag",
+    }
+</script>
+```
+
+```
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import MainTag from './components/MainTag';
+
+Vue.use(VueRouter);
+
+export default new VueRouter({
+    mode : 'history',
+
+    routes : [
+        {
+            path : '/mainTag', name : 'mainTag', component : MainTag
+        }
+    ]
+})
+```
+
+```
+import Vue from 'vue';
+import router from './router';
+
+require('./bootstrap');
+
+Window.Vue = require('vue');
+
+
+Vue.component('App', require('./components/App.vue').default)
+
+const app = new Vue({
+    el: "#app",
+    router
+});
+```
+
+router 추가
+
+![image](https://user-images.githubusercontent.com/6989005/102173482-7023fa80-3ede-11eb-8ca0-b801991603ad.png)
+
+
+![image](https://user-images.githubusercontent.com/6989005/102175487-022e0200-3ee3-11eb-839d-3e605a2edf9d.png)
+
+view-design을 설치해서 가져왔더니 tailwindcss가 살짝 먹혔다.. 그래도 우선 진행
+
+![image](https://user-images.githubusercontent.com/6989005/102191223-75903d80-3efc-11eb-85fd-190b26e07e6a.png)
+
+개발은 꾸준히.. 안 하다가 뭔가 하려고 하니까 벌써부터 막힌다.. 테이블은  https://tailwindcomponents.com/component/responsive-table 여기서 줍줍
+
+# Day 3
+
+태그 등록 페이지를 구성 했으니, 태그를 등록하는 부분에 대한 api설정과 TDD 작업
+
+php artisan make:test TagTest
+
+vendor/bin/phpunit --filter testExample
+
+```
+<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+
+class TagTest extends TestCase
+{
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_tag_create()
+    {
+        $this->withoutExceptionHandling();
+
+        $response = $this->post('/api/tags', [
+            'tagName' => 'Food',
+        ])->assertStatus(201);
+
+    }
+}
+
+```
+
+route에 tags가 없다는 에러
+
+```
+Route::middleware('auth:api')->group(function () {
+
+    Route::apiResources([
+        '/tags' => TagController::class,
+    ]);
+
+});
+```
+
+controller에 TagControlle가 없다는 에러
+
+벌써 막혔네;
+
+태그는 관리자가 생성하는거라 auth:api에 대해 신경쓰지 않았는데, 이 부분을 그룹으로 묶어서 사용하게 되면
+
+test에서 actingAs를 설정해줘야 한다.. 저 부분을 관리자로 바꾸고 나중에 권한을 줘서 사용하게 한다면 이게 맞는 것 같기도..
+
+```
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class TagTest extends TestCase
+{
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_tag_create()
+    {
+        $this->withoutExceptionHandling();
+        
+        $user = User::factory()->create();
+
+        $this->actingAs($user, 'api');
+
+        $response = $this->post('/api/tags', [
+            'tagName' => 'Food',
+        ])->assertStatus(201);
+
+    }
+}
+```
+
+```
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class TagController extends Controller
+{
+    //
+    public function store()
+    {
+        return response([], 201); 
+    }
+}
+
+```
+
+test해보면 green이 나온다
+
 
