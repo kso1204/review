@@ -33,7 +33,8 @@ class TagTest extends TestCase
         ]);
 
         $tag = Tag::first();
-
+            /* 
+        $this->assertCount(1, Tag::first()); */
         
         $response->assertStatus(201)
             ->assertJson([

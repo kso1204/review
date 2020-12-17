@@ -299,3 +299,23 @@ class TagController extends Controller
 test해보면 green이 나온다
 
 
+# Day 4 
+
+TagTest 내용
+
+class TagController extends Controller
+{
+    //
+    public function store()
+    {
+        $data = request()->validate([
+            'data.attributes.tagName' => 'required',
+        ]);
+        
+        $tag = Tag::create($data['data']['attributes']);
+
+        return new TagResource($tag);
+    }
+}
+
+이런식으로 추가 했는데.. 굳이 이렇게 해야 하나.. 이 부분에 대해서 다시 찾아봐야 할 것 같다.

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use App\Http\Resources\Tag as TagResource;
 
 class TagController extends Controller
 {
@@ -11,11 +12,11 @@ class TagController extends Controller
     public function store()
     {
         $data = request()->validate([
-            'tagName' => '',
+            'data.attributes.tagName' => 'required',
         ]);
         
-        $tag = Tag::create($data);
+        $tag = Tag::create($data['data']['attributes']);
 
-        return response([], 201); 
+        return new TagResource($tag);
     }
 }
